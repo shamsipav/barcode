@@ -1,12 +1,10 @@
-﻿using OfficeOpenXml;
+﻿using NetBarcode;
+using OfficeOpenXml;
 using OfficeOpenXml.Drawing;
 using System.Drawing;
-using System.Net;
 
 string fileName = "SampleExcelFile.xlsx";
 string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName); // путь к файлу в папке проекта
-
-string imageUrl = "https://barcodeapi.org/api/128/EUR000000082";
 
 Console.WriteLine("> BarcodeApp: генерация штрихкода");
 
@@ -22,20 +20,26 @@ using (ExcelPackage package = new ExcelPackage(newFile))
 {
     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
 
-    using (WebClient client = new WebClient())
-    {
-        byte[] imageData = client.DownloadData(imageUrl);
+    Bitmap barcodeImage = GenerateBarcodeImage("EUR000000082");
 
-        using (MemoryStream memoryStream = new MemoryStream(imageData))
-        {
-            using (Bitmap bitmap = new Bitmap(memoryStream))
-            {
-                // Добавление изображения в документ Excel
-                ExcelPicture picture = worksheet.Drawings.AddPicture("barcodeImage", bitmap);
-                picture.SetPosition(1, 0, 1, 0);
-            }
-        }
-    }
+    ExcelPicture barcodePicture = worksheet.Drawings.AddPicture("Barcode", barcodeImage);
+    barcodePicture.SetPosition(4, 0, 4, 0);
 
     package.Save();
+}
+
+Bitmap GenerateBarcodeImage(string data)
+{
+    BarcodeSettings barcodeSettings = new BarcodeSettings
+    {
+        BarcodeHeight = 100,
+        LabelFont = new Font("Arial", 10)
+    };
+
+    Barcode barcode = new Barcode();
+    barcode.Configure(barcodeSettings);
+
+    Bitmap image = barcode.GetImage(data);
+
+    return image;
 }

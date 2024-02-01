@@ -24,10 +24,10 @@ try
 
         ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
 
-        Bitmap barcodeImage = GenerateBarcodeImage("EUR000000082");
+        //Bitmap barcodeImage = GenerateBarcodeImage("EUR000000082");
 
-        ExcelPicture barcodePicture = worksheet.Drawings.AddPicture("Barcode", barcodeImage);
-        barcodePicture.SetPosition(4, 0, 4, 0);
+        //ExcelPicture barcodePicture = worksheet.Drawings.AddPicture("Barcode", barcodeImage);
+        //barcodePicture.SetPosition(4, 0, 4, 0);
 
 
         package.Save();

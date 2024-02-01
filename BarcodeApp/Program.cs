@@ -20,8 +20,6 @@ try
 
     using (ExcelPackage package = new ExcelPackage(newFile))
     {
-        package.DoAdjustDrawings = false;
-
         ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
 
         Bitmap barcodeImage = GenerateBarcodeImage("EUR000000082");
@@ -38,6 +36,10 @@ try
         Barcode barcode = new Barcode();
 
         Bitmap image = barcode.GetImage(data);
+
+        Console.WriteLine("HorizontalResolution: " + image.HorizontalResolution);
+        Console.WriteLine("VerticalResolution: " + image.VerticalResolution);
+
 
         return image;
     }

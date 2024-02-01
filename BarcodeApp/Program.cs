@@ -8,7 +8,7 @@ string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
 
 string imageUrl = "https://barcodeapi.org/api/128/EUR000000082";
 
-Console.WriteLine("> BarcodeApp: генерация штрихкода")ж
+Console.WriteLine("> BarcodeApp: генерация штрихкода");
 
 // Создаем новый файл Excel
 FileInfo newFile = new FileInfo(filePath);

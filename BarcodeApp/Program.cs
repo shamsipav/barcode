@@ -37,9 +37,8 @@ try
 
         Bitmap image = barcode.GetImage(data);
 
-        Console.WriteLine("HorizontalResolution: " + image.HorizontalResolution);
-        Console.WriteLine("VerticalResolution: " + image.VerticalResolution);
-
+        if (image.HorizontalResolution == 0 || image.VerticalResolution == 0)
+            image.SetResolution(96, 96);
 
         return image;
     }

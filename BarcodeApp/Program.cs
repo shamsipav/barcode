@@ -33,7 +33,14 @@ try
 
     Bitmap GenerateBarcodeImage(string data)
     {
+        BarcodeSettings barcodeSettings = new BarcodeSettings
+        {
+            BarcodeHeight = 100,
+            LabelFont = new Font("Arial", 10)
+        };
+
         Barcode barcode = new Barcode();
+        barcode.Configure(barcodeSettings);
 
         Bitmap image = barcode.GetImage(data);
 

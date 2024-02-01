@@ -7,35 +7,42 @@ string fileName = "SampleExcelFile.xlsx";
 string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName); // путь к файлу в папке проекта
 
 Console.WriteLine("> BarcodeApp: генерация штрихкода");
-
-// Создаем новый файл Excel
-FileInfo newFile = new FileInfo(filePath);
-if (newFile.Exists)
+try
 {
-    newFile.Delete();
-    newFile = new FileInfo(filePath);
+
+    // Создаем новый файл Excel
+    FileInfo newFile = new FileInfo(filePath);
+    if (newFile.Exists)
+    {
+        newFile.Delete();
+        newFile = new FileInfo(filePath);
+    }
+
+    using (ExcelPackage package = new ExcelPackage(newFile))
+    {
+        package.DoAdjustDrawings = false;
+
+        ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
+
+        Bitmap barcodeImage = GenerateBarcodeImage("EUR000000082");
+
+        ExcelPicture barcodePicture = worksheet.Drawings.AddPicture("Barcode", barcodeImage);
+        barcodePicture.SetPosition(4, 0, 4, 0);
+
+
+        package.Save();
+    }
+
+    Bitmap GenerateBarcodeImage(string data)
+    {
+        Barcode barcode = new Barcode();
+
+        Bitmap image = barcode.GetImage(data);
+
+        return image;
+    }
 }
-
-using (ExcelPackage package = new ExcelPackage(newFile))
+catch (Exception ex)
 {
-    package.DoAdjustDrawings = false;
-
-    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
-
-    Bitmap barcodeImage = GenerateBarcodeImage("EUR000000082");
-
-    ExcelPicture barcodePicture = worksheet.Drawings.AddPicture("Barcode", barcodeImage);
-    barcodePicture.SetPosition(4, 0, 4, 0);
-
-
-    package.Save();
-}
-
-Bitmap GenerateBarcodeImage(string data)
-{
-    Barcode barcode = new Barcode();
-
-    Bitmap image = barcode.GetImage(data);
-
-    return image;
+    Console.WriteLine(ex.Message);
 }
